@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div id="results-page" class="page">
+        <!-- Header -->
+        <div class="results-header">
+            <div class="results-header-content">
+                <div class="header-actions">
+                    <a href="{{ url_for('home') }}">
+                        <button class="btn-ghost" id="back-btn">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="15,18 9,12 15,6"/>
+                            </svg>
+                            Back
+                        </button>
+                    </a>
+                    <div class="header-info">
+                        <h1>Analysis Results</h1>
+                        <p id="results-filename">Report: {{ filename if filename else "uploaded-report" }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="results-container">
+            <div class="results-grid">
+                <!-- Sidebar -->
+                <div class="sidebar">
+                    <!-- Health Score Card -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/>
+                                </svg>
+                                <span>Health Score</span>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <div class="health-score">
+                                <div class="score-number">
+                                    <p>{{ report.health_score }}</p>
+                                </div>
+                                <p class="score-label">Overall Health</p>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" 
+                                    data-target="{{ report.health_score.replace('%', '')|int if report.health_score else 0 }}">
+                                </div>
+                            </div>
+                            <div class="health-badge">
+                                <span class="badge badge-primary">
+                                    {% if report.health_score %}
+                                        {% set score = report.health_score|replace('%','')|int %}
+                                        {% if score >= 80 %}
+                                            Excellent
+                                        {% elif score >= 60 %}
+                                            Good
+                                        {% elif score >= 40 %}
+                                            Fair
+                                        {% else %}
+                                            Poor
+                                        {% endif %}
+                                    {% else %}
+                                        Unknown
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Content -->
+                <div class="main-content">
+                    <!-- Detailed Analysis -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title" style="margin: 20px;">Detailed Analysis</div>
+                        </div>
+                        <div class="card-content" style="padding: 20px;">
+                            <p>{{ report.explanation if report.explanation else "No explanation available." }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Recommendations -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <line x1="12" y1="16" x2="12" y2="12"/>
+                                    <line x1="12" y1="8" x2="12.01" y2="8"/>
+                                </svg>
+                                <span>Recommendations</span>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <div class="recommendations-list">
+                                {% if report.recommendations %}
+                                    {% for rec in report.recommendations %}
+                                        <div class="recommendation-item">
+                                            <div class="recommendation-bullet"></div>
+                                            <p>{{ rec }}</p>
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <p>No recommendations available.</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Debug raw output if error -->
+                    {% if report.error %}
+                        <div class="card" style="margin-top:20px;">
+                            <div class="card-header">
+                                <div class="card-title">⚠ Error</div>
+                            </div>
+                            <div class="card-content">
+                                <pre>{{ report.raw_output }}</pre>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        animateProgressBar();
+    });
+    </script>
+{% endblock content %}

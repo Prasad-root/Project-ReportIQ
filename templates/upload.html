@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div id="home-page" class="page active">
+    <div class="container">
+        <div class="content-wrapper">
+            
+            <!-- Header -->
+            <div class="header">
+                <h1>Blood Report Analysis</h1>
+                <p>Upload your blood report and get detailed explanations powered by AI</p>
+            </div>
+
+            <!-- Upload Area Form -->
+            <form id="report-form" action="{{ url_for('explain') }}" method="POST" enctype="multipart/form-data">
+                <div class="upload-card" id="upload-area">
+                    <div class="upload-content">
+                        <!-- Hidden file input -->
+                        <input type="file" name="file" id="file-input" accept=".pdf,.jpg,.jpeg,.png" style="display: none;" required>
+
+                        <!-- Upload Section -->
+                        <div id="upload-section" class="upload-section">
+                            <div class="upload-icon">
+                                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                    <polyline points="7,10 12,15 17,10"/>
+                                    <line x1="12" y1="15" x2="12" y2="3"/>
+                                </svg>
+                            </div>
+                            <div class="upload-text">
+                                <h3>Upload your blood report</h3>
+                                <p>Drag and drop your file here, or click to browse</p>
+                                <p class="file-types">Supports PDF, JPG, PNG files</p>
+                            </div>
+                            <button class="choose-file-btn" type="button" id="choose-file-btn">Choose File</button>
+                        </div>
+
+                        <!-- Selected File Section -->
+                        <div id="selected-file-section" class="selected-file-section" style="display: none;">
+                            <div class="file-info">
+                                <div class="file-icon">
+                                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                        <polyline points="14,2 14,8 20,8"/>
+                                        <line x1="16" y1="13" x2="8" y2="13"/>
+                                        <line x1="16" y1="17" x2="8" y2="17"/>
+                                        <polyline points="10,9 9,9 8,9"/>
+                                    </svg>
+                                </div>
+                                <div class="file-details">
+                                    <p class="file-name" id="file-name"></p>
+                                    <p class="file-size" id="file-size"></p>
+                                </div>
+                            </div>
+                            <div class="file-actions">
+                                <button class="btn-outline" type="button" id="remove-file-btn">Remove</button>
+                                <button class="btn-outline" type="button" id="change-file-btn">Change File</button>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="analyze-button-container" style="margin-top: 1rem;">
+                            <button class="btn-primary btn-large" type="submit">Check Report</button>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Spinner -->
+<div id="spinner-overlay" class="spinner-overlay" style="display: none;">
+    <div class="spinner"></div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const fileInput = document.getElementById('file-input');
+    const chooseBtn = document.getElementById('choose-file-btn');
+    const removeBtn = document.getElementById('remove-file-btn');
+    const changeBtn = document.getElementById('change-file-btn');
+    const uploadSection = document.getElementById('upload-section');
+    const selectedSection = document.getElementById('selected-file-section');
+    const fileName = document.getElementById('file-name');
+    const fileSize = document.getElementById('file-size');
+    const form = document.getElementById('report-form');
+    const spinnerOverlay = document.getElementById('spinner-overlay');
+
+    chooseBtn.addEventListener('click', () => fileInput.click());
+    changeBtn.addEventListener('click', () => fileInput.click());
+
+    fileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            fileName.textContent = file.name;
+            fileSize.textContent = (file.size / 1024 / 1024).toFixed(2) + ' MB';
+            uploadSection.style.display = 'none';
+            selectedSection.style.display = 'block';
+        }
+    });
+
+    removeBtn.addEventListener('click', () => {
+        fileInput.value = '';
+        uploadSection.style.display = 'block';
+        selectedSection.style.display = 'none';
+    });
+
+    form.addEventListener('submit', () => {
+        spinnerOverlay.style.display = 'flex';
+    });
+});
+</script>
+{% endblock content %}
