@@ -67,7 +67,8 @@ pip install -r requirements.txt
 4.  **Set environment variable**
 
 ``` bash
-GROQ_LLM=your_groq_api_key
+GROQ_LLM = your_groq_api_key
+GROQ_VISION = your_groq_vision_api_key
 ```
 
 ------------------------------------------------------------------------
