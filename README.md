@@ -96,13 +96,3 @@ GROQ_VISION = your_groq_vision_api_key
 ✅ Store user history for tracking progress
 
 ------------------------------------------------------------------------
-
-## 🤝 Contributing
-
-Contributions are welcome! Please open issues and submit PRs.
-
-------------------------------------------------------------------------
-
-## 📜 License
-
-This project is licensed under the MIT License.
