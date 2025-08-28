@@ -83,8 +83,8 @@ GROQ_LLM=your_groq_api_key
 
 ## 📸 Screenshots
 
-(Add your UI screenshots here)
-
+![Home Page](screenshots/home.png "Home Page")
+![Analysis Results](screenshots/results.png "Results Page")
 ------------------------------------------------------------------------
 
 ## 🛠️ Future Improvements
